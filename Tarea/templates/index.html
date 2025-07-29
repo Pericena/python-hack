@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Bot Simple</title>
+</head>
+
+<body>
+  <h2>Bot de Chat Simple</h2>
+  <div>
+    <input type="text" id="mensaje" placeholder="Escribe algo..." />
+    <button onclick="enviarMensaje()">Enviar</button>
+  </div>
+  <p id="respuesta"></p>
+
+  <script>
+    async function enviarMensaje() {
+      const mensaje = document.getElementById("mensaje").value;
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ mensaje })
+      });
+
+      const data = await res.json();
+      document.getElementById("respuesta").innerText = "Bot: " + data.respuesta;
+    }
+  </script>
+</body>
+
+</html>
