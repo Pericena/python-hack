@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Productos</title>
+</head>
+
+<body>
+  <h1>Mis Productos</h1>
+  <ul id="lista-productos"></ul>
+
+  <h2>Agregar nuevo producto</h2>
+  <input id="nombre" placeholder="Nombre del producto">
+  <input id="precio" type="number" placeholder="Precio">
+  <button onclick="agregar()">Agregar</button>
+
+  <script>
+    // Mostrar productos en la página
+    fetch('/api/productos')
+      .then(res => res.json())
+      .then(data => {
+        const lista = document.getElementById('lista-productos')
+        data.forEach(p => {
+          const li = document.createElement('li')
+          li.textContent = `${p.nombre} - Bs ${p.precio}`
+          lista.appendChild(li)
+        })
+      })
+
+    // Agregar nuevo producto
+    function agregar() {
+      const nombre = document.getElementById('nombre').value
+      const precio = document.getElementById('precio').value
+
+      fetch('/api/productos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, precio })
+      })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.mensaje)
+          location.reload()
+        })
+    }
+  </script>
+</body>
+
+</html>

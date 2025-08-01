@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "nombre": "Celular Samsung",
+    "precio": 1200
+  },
+  {
+    "id": 2,
+    "nombre": "Celular Xiaomi",
+    "precio": 950
+  },
+  {
+    "nombre": "ewew",
+    "precio": "34",
+    "id": 3
+  }
+]
