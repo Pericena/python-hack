@@ -1,0 +1,106 @@
+
+### ✅ FUNCIONALIDADES NUEVAS PARA TU API:
+
+1. 🔍 **Buscar usuario por nombre**
+2. 🔐 **Iniciar sesión (login)**
+3. 🔢 **Cantidad total de usuarios**
+
+Todos funcionando **con el mismo archivo `data.json`**.
+
+---
+
+## ✨ Código completo con funcionalidades extra
+
+Agrega este bloque dentro del mismo `app.py`, debajo de tus otros endpoints:
+
+---
+
+### 🔍 Buscar usuario por nombre
+
+```python
+# GET: Buscar usuarios por nombre (ej: /usuarios/buscar?nombre=juan)
+@app.route('/usuarios/buscar', methods=['GET'])
+def buscar_usuario():
+    nombre = request.args.get('nombre', '').lower()
+    usuarios = cargar_usuarios()
+    resultados = [u for u in usuarios if nombre in u['nombre'].lower()]
+    return jsonify(resultados)
+```
+
+#### ✅ Ejemplo de uso con `curl`:
+
+```bash
+curl "http://127.0.0.1:5000/usuarios/buscar?nombre=luishiño"
+```
+
+---
+
+### 🔐 Login básico (solo email y nombre)
+
+```python
+# POST: Iniciar sesión
+@app.route('/login', methods=['POST'])
+def login():
+    datos = request.get_json()
+    email = datos.get('email')
+    nombre = datos.get('nombre')
+
+    usuarios = cargar_usuarios()
+    for u in usuarios:
+        if u['email'] == email and u['nombre'].lower() == nombre.lower():
+            return jsonify({'mensaje': 'Login exitoso', 'usuario': u})
+    return jsonify({'mensaje': 'Credenciales inválidas'}), 401
+```
+
+#### ✅ Ejemplo JSON para enviar:
+
+```json
+{
+  "email": "luishino@example.com",
+  "nombre": "Luishiño"
+}
+```
+
+#### ✅ Con `curl`:
+
+```bash
+curl -X POST http://127.0.0.1:5000/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "luishino@example.com", "nombre": "Luishiño"}'
+```
+
+---
+
+### 🔢 Contar usuarios
+
+```python
+# GET: Cantidad total de usuarios
+@app.route('/usuarios/total', methods=['GET'])
+def total_usuarios():
+    usuarios = cargar_usuarios()
+    return jsonify({'total': len(usuarios)})
+```
+
+#### ✅ Con `curl`:
+
+```bash
+curl http://127.0.0.1:5000/usuarios/total
+```
+
+---
+
+## 📋 Resumen actualizado de endpoints
+
+| Método | Ruta                        | Descripción                     |
+| ------ | --------------------------- | ------------------------------- |
+| GET    | `/`                         | Bienvenida                      |
+| GET    | `/usuarios`                 | Listar usuarios                 |
+| GET    | `/usuarios/<id>`            | Usuario por ID                  |
+| POST   | `/usuarios`                 | Crear nuevo usuario             |
+| PUT    | `/usuarios/<id>`            | Actualizar usuario              |
+| DELETE | `/usuarios/<id>`            | Eliminar usuario                |
+| GET    | `/usuarios/buscar?nombre=x` | Buscar usuario por nombre       |
+| POST   | `/login`                    | Iniciar sesión                  |
+| GET    | `/usuarios/total`           | Contar cuántos usuarios existen |
+
+---
